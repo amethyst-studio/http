@@ -1,0 +1,10 @@
+panel.amethyst.live {
+	import set_file panel.amethyst.live INFO
+	import base
+	import real_ip
+
+	root * /var/www/html/panel.amethyst.live/pt-panel/public
+
+	php_fastcgi php-fpm:9000
+	file_server
+}

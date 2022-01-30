@@ -1,0 +1,67 @@
+version: '2.4'
+
+services:
+  # CaddyServer HTTP Container
+  ## Controls the forward-facing web configuration of the machine.
+  ## This includes the HTTP and HTTPS ports, SSL certificates, and more.
+  ## This service includes the reverse-proxy mechanism for accessing services.
+  http:
+    container_name: http
+    image: http_server:r0
+    restart: always
+    depends_on:
+      - php-fpm
+      - redis
+    build:
+      context: .
+    ports:
+      - "144.76.69.43:80:80"
+      - "144.76.69.43:8080:8080"
+      - "144.76.69.43:443:443"
+    volumes:
+      - ./sys/data:/data
+      - ./conf.d:/conf.d
+        # Content for Servers
+      - ./sys/content:/var/www/html
+    networks:
+      - http-network
+    extra_hosts:
+    # Allows access to the host machine hosted services.
+    - "host.docker.internal:host-gateway"
+
+  # PHP FPM Container
+  ## Controls the PHP applications hosted on the machine.
+  ## This includes the Laravel Framework, along with other PHP server applications.
+  php-fpm:
+    container_name: php-fpm
+    image: php_fpm_8:r0
+    restart: always
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: php.Dockerfile
+    volumes:
+      # Overwrite the PHP-FastCGI Launcher
+      - ./scripts/php-fpm.sh:/launcher.sh
+      # Content for PHP Servers
+      - ./sys/content:/var/www/html
+    networks:
+      - http-network
+
+  # Redis Server
+  ## Fast-access memory cache for the machine applications.
+  redis:
+    container_name: redis
+    image: redis:6
+    command: 'redis-server --save 60 1 --loglevel warning'
+    restart: always
+    volumes:
+      - ./sys/redis:/data
+    networks:
+      - http-network
+
+# Shared network mapping for inter-container communication.
+networks:
+  http-network:
+    driver: bridge

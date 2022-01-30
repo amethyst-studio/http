@@ -1,0 +1,53 @@
+{
+	# General Options
+	# debug
+	http_port 80
+	https_port 443
+	admin 127.0.0.1:1024
+	grace_period 15s
+
+	# Ordering of Modules
+	order realip first
+
+	# Storage Module
+	storage redis {
+		address redis:6379
+		db 1
+	}
+
+	# Loggers
+	log default {
+		output stdout
+		format console {
+			time_format wall
+		}
+		level ERROR
+	}
+
+	# TLS Options
+	email report@amethyst.live
+	on_demand_tls {
+		interval 5s
+		burst 15
+	}
+
+	# Server Default Options
+	servers {
+		timeouts {
+			read_header 15s
+			read_body 30s
+			write 30s
+			idle 5m
+		}
+		max_header_size 16kb
+		protocol {
+			experimental_http3
+		}
+	}
+}
+
+# Import the Caddyfile(s) for the alternative configuration(s) and snippets.
+import /conf.d/*.Caddyfile
+
+# Import the Caddyfile(s) for the servers.
+import /conf.d/sites-enabled/*.Caddyfile

@@ -1,0 +1,21 @@
+(set_console) {
+	log {
+		output stdout
+		format formatted "{common_log} {request>headers>Referer>[0]} {request>headers>User-Agent>[0]}" {
+			time_format wall
+		}
+		level {args.0}
+	}
+}
+
+(set_file) {
+	log {
+		output file /data/{args.0}.log {
+			roll_keep 16
+		}
+		format formatted "{common_log} {request>headers>Referer>[0]} {request>headers>User-Agent>[0]}" {
+			time_format wall
+		}
+		level {args.1}
+	}
+}

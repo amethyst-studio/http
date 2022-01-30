@@ -1,0 +1,35 @@
+# Base Runtime
+FROM php:8.0.15-fpm
+
+# Install the needed system dependencies.
+RUN apt update && apt install -y apt-utils aspell-de aspell-en curl firebird-dev libc-client-dev libcurl3-dev libcurl4 libfreetype6-dev libicu-dev libjpeg62-turbo-dev libkrb5-dev libldap2-dev libldb-dev libmcrypt-dev libonig-dev libpng-dev libpq-dev libpspell-dev librecode-dev librecode0 libsnmp-dev libsqlite3-0 libsqlite3-dev libssl-dev libtidy-dev libxml2-dev libxml2-dev libxslt-dev libzip-dev mariadb-client postgresql-client
+RUN apt autoremove -y && apt clean autoclean
+RUN rm -rf /var/lib/apt/lists/*
+
+# docker-php-ext-install.
+RUN docker-php-ext-install -j4 \
+  bcmath \
+  curl \
+  gd \
+  mbstring \
+  mysqli \
+  pdo \
+  pdo_mysql \
+  pdo_pgsql \
+  pgsql \
+  zip
+
+# pecl.
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+# Install Composer for PHP.
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+# Install the container launch script.
+COPY ./launcher/php-fpm.sh /launch.sh
+
+# Set the entrypoint to the launch script above for container boot.
+ENTRYPOINT ["/bin/sh", "/launch.sh"]

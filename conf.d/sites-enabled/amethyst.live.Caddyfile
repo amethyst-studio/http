@@ -1,0 +1,7 @@
+amethyst.live {
+	import set_console INFO
+	import base
+	import real_ip
+
+	respond "Hello, world! Visiting: amethyst.live"
+}

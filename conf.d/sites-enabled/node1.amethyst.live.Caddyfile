@@ -1,0 +1,7 @@
+node1.amethyst.live, node1.amethyst.live:8080 {
+	import set_file node1.amethyst.live INFO
+	import base
+
+	reverse_proxy host.docker.internal:8080
+	file_server
+}
