@@ -1,6 +1,9 @@
 # Base Runtime as 'builder'
 FROM caddy:2-builder AS builder
 
+# Set the state of the shell.
+SHELL ["/bin/sh", "-o", "pipefail", "-c"]
+
 # Build the CaddyServer runtime.
 RUN xcaddy build \
   --with github.com/gamalan/caddy-tlsredis \

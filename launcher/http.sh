@@ -5,8 +5,7 @@
 
 # Entrypoint: Start caddy in forground shell.
 echo "Started::service->caddy"
-while true
-do
+while true; do
   /usr/bin/caddy run --config /conf.d/Caddyfile
   echo "Warning::service->caddy :: The Caddy server exited unexpectedly, restarting..."
 done
