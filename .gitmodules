@@ -2,7 +2,3 @@
 	path = .rc
 	url = git@github.com:amethyst-studio/.rc.git
 	branch = main
-[submodule ".github"]
-	path = .github
-	url = git@github.com:amethyst-studio/.github.git
-	branch = main
