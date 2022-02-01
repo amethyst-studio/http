@@ -25,7 +25,7 @@ mapfile -t ALLOWED_SERVERS <<< "${DOCKER_CUT}"
 contains "${SELECTED_CONTAINER}" "${ALLOWED_SERVERS[@]}"
 IS_ALLOWED=$?
 
-if [[ ${IS_ALLOWED} -eq 0   ]]; then
+if [[ ${IS_ALLOWED} -eq 0 ]]; then
     # Start the container.
     docker exec -it "${SELECTED_CONTAINER}" "/bin/sh"
 else
