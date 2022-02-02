@@ -1,9 +1,7 @@
 {
   "apps": {
     "layer4": {
-      "servers": {
-
-      }
+      "servers": {}
     }
   }
 }
