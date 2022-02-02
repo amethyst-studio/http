@@ -14,6 +14,7 @@ services:
       - redis
     build:
       context: .
+      dockerfile: ./http.Dockerfile
     ports:
       - "144.76.69.43:80:80" # HTTP
       - "144.76.69.43:443:443" # HTTP(s)
@@ -40,7 +41,7 @@ services:
       - redis
     build:
       context: .
-      dockerfile: php.Dockerfile
+      dockerfile: ./php-fpm.Dockerfile
     volumes:
       # Content for PHP Servers
       - ./sys/content:/var/www/html
