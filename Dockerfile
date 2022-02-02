@@ -6,6 +6,7 @@ SHELL ["/bin/sh", "-o", "pipefail", "-c"]
 
 # Build the CaddyServer runtime.
 RUN xcaddy build \
+  --with github.com/RussellLuo/caddy-ext/layer4 \
   --with github.com/gamalan/caddy-tlsredis \
   --with github.com/caddyserver/format-encoder \
   --with github.com/kirsch33/realip

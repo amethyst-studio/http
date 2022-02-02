@@ -15,9 +15,9 @@ services:
     build:
       context: .
     ports:
-      - "144.76.69.43:80:80"
-      - "144.76.69.43:8080:8080"
-      - "144.76.69.43:443:443"
+      - "144.76.69.43:80:80" # HTTP
+      - "144.76.69.43:443:443" # HTTP(s)
+      - "144.76.69.43:8080:8080" # node1.amethyst.live
     volumes:
       - ./sys/data:/data
       - ./conf.d:/conf.d
@@ -58,6 +58,36 @@ services:
       - ./sys/redis:/data
     networks:
       - http-network
+
+  # Mailserver
+  ## Production-ready fullstack but simple mail server (SMTP, IMAP, LDAP, Antispam, Antivirus, etc.) running inside a container.
+  mailserver:
+    container_name: mailserver
+    image: mailserver/docker-mailserver:latest
+    restart: always
+    ports:
+      - "144.76.69.43:25:25"
+      - "144.76.69.43:465:465"
+      - "144.76.69.43:587:587"
+      - "144.76.69.43:993:993"
+      - "144.76.69.43:143:143"
+    volumes:
+      - ./sys/docker-data/dms/mail-data/:/var/mail/
+      - ./sys/docker-data/dms/mail-state/:/var/mail-state/
+      - ./sys/docker-data/dms/mail-logs/:/var/log/mail/
+      - ./sys/docker-data/dms/config/:/tmp/docker-mailserver/
+      - ./sys/data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mailerd.amethyst.live/mailerd.amethyst.live.crt:/etc/letsencrypt/live/mail.example.com/fullchain.pem:ro
+      - ./sys/data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mailerd.amethyst.live/mailerd.amethyst.live.key:/etc/letsencrypt/live/mail.example.com/privkey.pem:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - http-network
+    hostname: mailerd
+    domainname: amethyst.live
+    env_file: ./mailserver.env
+    stop_grace_period: 60s
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
 
 # Shared network mapping for inter-container communication.
 networks:
