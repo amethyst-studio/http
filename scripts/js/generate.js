@@ -1,23 +1,6 @@
-const { readdirSync, readFileSync, writeFileSync } = require("fs");
-const { resolve, basename } = require("path");
+const { readFileSync, writeFileSync } = require("fs");
+const { resolve } = require("path");
 const { readdir } = require("fs").promises;
-
-/**
- * Performs a deep walk of the given folder and returns an array of files.
- *
- * @param {string} folder - The folder to walk.
- * @returns {string[]} An array of files.
- */
-async function getFiles(folder) {
-  const dirents = await readdir(folder, { withFileTypes: true });
-  const files = await Promise.all(
-    dirents.map((dirent) => {
-      const res = resolve(folder, dirent.name);
-      return dirent.isDirectory() ? getFiles(res) : res;
-    })
-  );
-  return files.flat();
-}
 
 /**
  * Performs a deep merge of objects and returns new object. Does not modify
