@@ -3,9 +3,9 @@
 # This launcher is registered to the 'http' container.
 ##: ENTRYPOINT_LAUNCHER
 
-# Entrypoint: Start caddy in forground shell.
-echo "Started::service->caddy"
+# Entrypoint: Start http in forground shell.
+echo "Started::service->http"
 while true; do
   /usr/bin/caddy run --config /data/_r.msf.json
-  echo "Warning::service->caddy :: The Caddy server exited unexpectedly, restarting..."
+  echo "Warning::service->http :: The http(s) server exited unexpectedly, restarting..."
 done
