@@ -1,0 +1,49 @@
+{
+	# General Options
+	# debug
+	http_port 80
+	https_port 443
+	admin 127.0.0.1:1024
+	grace_period 15s
+
+	# Apply the RealIP Module Ordering
+	order realip first
+
+	# Loggers
+	log default {
+		output stdout
+		format console {
+			time_format wall
+		}
+		level ERROR
+	}
+
+	# TLS Options
+	email report@amethyst.live
+	key_type rsa4096
+	on_demand_tls {
+		interval 24h
+		burst 50
+		ask https://api.amethyst.live/https/ask
+	}
+
+	# Server Default Options
+	servers {
+		timeouts {
+			read_header 15s
+			read_body 30s
+			write 30s
+			idle 5m
+		}
+		max_header_size 16kb
+		protocol {
+			experimental_http3
+		}
+	}
+}
+
+# Import the Caddyfile(s) for the alternative configuration(s) and snippets.
+import /conf.d/*.Caddyfile
+
+# Import the Caddyfile(s) for the servers.
+import /conf.d/sites-enabled/*.Caddyfile

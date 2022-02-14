@@ -1,0 +1,7 @@
+api.amethyst.live {
+  import set_console INFO
+  import base
+  import real_ip
+
+  reverse_proxy host.docker.internal:1044
+}

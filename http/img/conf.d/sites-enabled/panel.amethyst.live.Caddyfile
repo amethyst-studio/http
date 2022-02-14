@@ -1,0 +1,17 @@
+panel.amethyst.live {
+	import set_file panel.amethyst.live INFO
+	import base
+	import real_ip
+
+	root * /data/www/panel.amethyst.live/public/
+
+	php_fastcgi fastcgi:9000
+	file_server
+}
+
+node1.amethyst.live, node1.amethyst.live:8080 {
+	import set_file node1.amethyst.live INFO
+	import base
+
+	reverse_proxy host.docker.internal:1025
+}

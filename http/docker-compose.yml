@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # PC: HTTP Caddy Service.
+  # Note: Caddy Clustering will require the Redis SC to be externalized with authentication. Scaling should not be needed by volume.
+  http:
+    domainname: 'amethyst.live'
+    image: 'http:0'
+    restart: 'always'
+    build:
+      context: './img/'
+      dockerfile: './Dockerfile'
+    depends_on:
+      - 'fastcgi'
+      - 'redis'
+    ports:
+      - '80:80' # HTTP
+      - '443:443' # HTTPs
+      - '8080:8080' # Valiant at node1.amethyst.live with TLS.
+    volumes:
+      - './img/conf.d/:/conf.d/:ro'
+      - './_/http/:/data/'
+    stop_grace_period: '60s'
+    cpu_count: 4
+    mem_limit: '2G'
+    memswap_limit: '4G'
+    dns:
+    - '1.1.1.1'
+    - '8.8.8.8'
+    - '1.0.0.1'
+    - '8.4.4.8'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    cap_add:
+      - 'NET_ADMIN'
+
+  # SC: FastCGI Service.
+  fastcgi:
+    extends:
+      file: '../sidecar/fastcgi/fastcgi.yml'
+      service: 'fastcgi'
+    volumes:
+      - './img/conf.d/:/conf.d/:ro'
+      - './_/http/:/data/'
+
+  # SC: Redis Service.
+  # Note: Scaling PC will require this service to be externalized with authentication. Scaling should not be needed by volume.
+  redis:
+    extends:
+      file: '../sidecar/redis/redis.yml'
+      service: 'redis'
+    volumes:
+      - './_/redis/:/data/'

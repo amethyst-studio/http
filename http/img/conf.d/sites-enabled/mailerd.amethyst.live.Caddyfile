@@ -1,0 +1,7 @@
+mailerd.amethyst.live {
+  import set_console INFO
+  import base
+  import real_ip
+
+  respond "NOTICE: This domain issues the SSL certificate for the 'mailerd.amethyst.live' email server. Otherwise, this domain is inactive."
+}

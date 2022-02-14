@@ -1,0 +1,4 @@
+**/_
+**/.env
+!**/template.env
+!**/mailerd.env

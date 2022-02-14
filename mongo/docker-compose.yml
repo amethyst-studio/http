@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: 'mongo:0'
+    command: '--config /mongod.conf'
+    restart: 'always'
+    build:
+      context: './img/'
+      dockerfile: './Dockerfile'
+    ports:
+      - '27017:27017'
+    volumes:
+      - './_/mongo/:/data/db/'
+    env_file: './.env'
+    stop_grace_period: '60s'
+    cpu_count: 4
+    mem_limit: '4G'
+    memswap_limit: '8G'
+    dns:
+      - '1.1.1.1'
+      - '8.8.8.8'
+      - '1.0.0.1'
+      - '8.4.4.8'
+
