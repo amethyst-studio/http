@@ -1,0 +1,21 @@
+
+services:
+  # SC: Loadable Dockerized Redis Server
+  # Note: Requires volume mount to be persistent unique to each service.
+  redis:
+    image: 'redis:0'
+    restart: 'unless-stopped'
+    build:
+      context: './img/'
+      dockerfile: './Dockerfile'
+    deploy:
+      mode: 'global'
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '1G'
+    dns:
+      - '1.1.1.1'
+      - '1.0.0.1'
+      - '8.8.8.8'
+      - '8.4.4.8'

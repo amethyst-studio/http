@@ -1,0 +1,7 @@
+keycloak.amethyst.live {
+  import set_console INFO
+  import base
+  import real_ip
+
+  reverse_proxy 10.128.0.2:56124
+}

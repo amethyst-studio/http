@@ -1,0 +1,26 @@
+
+services:
+  # PC: Dockerized MongoDB Server
+  mongo:
+    image: 'mongo:0'
+    command: '--config /mongod.conf'
+    build:
+      context: './img/'
+      dockerfile: './Dockerfile'
+    deploy:
+      mode: 'global'
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: '4G'
+    restart: 'unless-stopped'
+    env_file: './.env'
+    ports:
+      - '27017:27017'
+    volumes:
+      - './_/mongo/:/data/db/'
+    dns:
+      - '1.1.1.1'
+      - '1.0.0.1'
+      - '8.8.8.8'
+      - '8.4.4.8'

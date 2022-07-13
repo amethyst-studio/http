@@ -1,0 +1,25 @@
+
+services:
+  # PC: Dockerized MySQL Server
+  mysql:
+    image: 'linuxserver/mariadb:alpine'
+    deploy:
+      mode: 'global'
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: '4G'
+    restart: 'unless-stopped'
+    environment:
+      - 'PUID=1000'
+      - 'PGID=1000'
+    env_file: './.env'
+    ports:
+      - '3306:3306'
+    volumes:
+      - './_/mysql/:/config/'
+    dns:
+      - '1.1.1.1'
+      - '1.0.0.1'
+      - '8.8.8.8'
+      - '8.4.4.8'

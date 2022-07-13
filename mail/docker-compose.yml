@@ -1,0 +1,37 @@
+
+services:
+  # PC: Dockerized Mail Server
+  mail:
+    image: 'mailserver/docker-mailserver:latest'
+    deploy:
+      mode: 'global'
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: '2G'
+    restart: 'unless-stopped'
+    hostname: 'mailerd'
+    domainname: 'amethyst.live'
+    env_file: './mailerd.env'
+    ports:
+      - '25:25'
+      - '465:465'
+      - '587:587'
+      - '993:993'
+      - '143:143'
+    volumes:
+      - './_/mail/config:/tmp/docker-mailserver/'
+      - './_/mail/data:/var/mail/'
+      - './_/mail/logs:/var/log/mail/'
+      - './_/mail/state:/var/mail-state/'
+      - '../http/_/http/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mailerd.amethyst.live/mailerd.amethyst.live.crt:/etc/letsencrypt/live/mail.example.com/fullchain.pem:ro'
+      - '../http/_/http/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mailerd.amethyst.live/mailerd.amethyst.live.key:/etc/letsencrypt/live/mail.example.com/privkey.pem:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    dns:
+      - '1.1.1.1'
+      - '1.0.0.1'
+      - '8.8.8.8'
+      - '8.4.4.8'
+    cap_add:
+      - 'NET_ADMIN'
+      - 'SYS_PTRACE'

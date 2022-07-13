@@ -1,0 +1,43 @@
+
+services:
+  # PC: Dockerized HTTP Server
+  # Note: Caddy Clustering will require the Redis SC to be externalized with authentication. Scaling should not be needed by volume.
+  http:
+    image: 'http:0'
+    build:
+      context: './img/'
+      dockerfile: './Dockerfile'
+    deploy:
+      mode: 'global'
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2G'
+    depends_on:
+      - 'redis'
+    restart: 'unless-stopped'
+    domainname: 'amethyst.live'
+    ports:
+      - '80:80' # HTTP
+      - '443:443' # HTTPs
+    volumes:
+      - './img/conf.d/:/conf.d/:ro'
+      - './_/http/:/data/'
+    dns:
+    - '1.1.1.1'
+    - '1.0.0.1'
+    - '8.8.8.8'
+    - '8.4.4.8'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    cap_add:
+      - 'NET_ADMIN'
+
+  # SC: Redis Service.
+  # Note: Scaling PC will require this service to be externalized with authentication. Scaling should not be needed by volume.
+  redis:
+    extends:
+      file: '../sidecar/redis/redis.yml'
+      service: 'redis'
+    volumes:
+      - './_/redis/:/data/'
