@@ -7,10 +7,6 @@ git clone https://github.com/amethyst-studio/meta "${TEMP_DIR}"
 
 echo "Pulling the files which can be updated."
 cp -r "./${TEMP_DIR}/.github" "./"
-cp -r "./${TEMP_DIR}/CODE_OF_CONDUCT.md" "./CODE_OF_CONDUCT.md"
-cp -r "./${TEMP_DIR}/CONTRIBUTING.md" "./CONTRIBUTING.md"
-cp -r "./${TEMP_DIR}/SECURITY.md" "./SECURITY.md"
-cp -r "./${TEMP_DIR}/SUPPORT.md" "./SUPPORT.md"
 cp -r "./${TEMP_DIR}/UPDATE_TEMPLATE.sh" "./UPDATE_TEMPLATE.sh"
 cp -r "./${TEMP_DIR}/.editorconfig" "./.editorconfig"
 cp -r "./${TEMP_DIR}/.gitattributes" "./.gitattributes"
@@ -27,10 +23,6 @@ rm -rf "./${TEMP_DIR}/"
 
 # Commit the changes.
 git reset
-git add CODE_OF_CONDUCT.md
-git add CONTRIBUTING.md
-git add SECURITY.md
-git add SUPPORT.md
 git add UPDATE_TEMPLATE.sh
 git add .github
 git add .editorconfig
